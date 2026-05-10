@@ -1,11 +1,12 @@
 :root {
-  --card-width: 300px;
-  --card-height: 400px;
+  --card-width: 340px;
+  --card-height: 440px;
 }
 
 .card-scene {
   width: var(--card-width);
   height: var(--card-height);
+  max-width: 90vw;
   perspective: 1000px; /* Gives the 3D depth effect */
   margin: 50px auto;
 }
