@@ -1,0 +1,202 @@
+:root {
+  --card-width: 300px;
+  --card-height: 400px;
+}
+
+.card-scene {
+  width: var(--card-width);
+  height: var(--card-height);
+  perspective: 1000px; /* Gives the 3D depth effect */
+  margin: 50px auto;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Hides the "underneath" of the div */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.dance-letter {
+  display: inline-block;
+  
+  /* 1. We combine BOTH animations here, separated by a comma */
+  animation: wave 1.5s ease-in-out infinite, shimmer 3s linear infinite;
+  
+  /* 2. We apply the gradient and transparency directly to the letters */
+  background: linear-gradient(to right, #cf3a85, #ffb3c6, #d63384);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.card-back {
+  background: #fff5f5;
+  color: #d63384;
+  transform: rotateY(180deg); /* Pre-flip the back so it faces the right way */
+}
+
+.card-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This acts like a mask: it scales and crops the photo to fit perfectly without stretching */
+  border-radius: 15px; /* Matches the rounded corners of your card */
+  position: absolute; /* Pins it to the background of the card */
+  top: 0;
+  left: 0;
+  z-index: -1; /* Ensures the image stays underneath any text */
+}
+
+/* Target the h1 specifically on the front face */
+.card-front h1 {
+  /* Create a pink/gold/pink gradient */
+  background: linear-gradient(to right, #cf3a85, #ffb3c6, #d63384);
+  background-size: 200% auto;
+  
+  /* Mask the background so it only shows through the letters */
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Run the shimmer animation continuously */
+  animation: shimmer 3s linear infinite;
+}
+
+/* The logic that physically moves the gradient */
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Makes sure the letters sit next to each other but can still be moved */
+.dance-letter {
+  display: inline-block;
+  animation: wave 1.5s ease-in-out infinite;
+  /* Optional: Keep the shimmer effect we added earlier by applying it to the whole h1 */
+}
+
+/* The physical movement */
+@keyframes wave {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-12px); /* How high they bounce */
+  }
+}
+
+/* Ensure the body hides anything that scrolls off-screen */
+body {
+  margin: 0;
+  /* Deep sunset gradient: Twilight purple -> Coral -> Warm Gold */
+  background: linear-gradient(to bottom, #5c4273 0%, #b85a6e 40%, #e68063 75%, #f2c777 100%);
+  overflow: hidden; 
+}
+
+/* The sky container */
+.scenic-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -5;
+  pointer-events: none; 
+}
+
+/* --- Pure CSS Clouds --- */
+.cloud {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50px;
+  animation: drift linear infinite;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+/* Creating the fluffy bumps using pseudo-elements */
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+.cloud::before {
+  width: 50px; height: 50px;
+  top: -20px; left: 15px;
+}
+
+.cloud::after {
+  width: 70px; height: 70px;
+  top: -30px; right: 15px;
+}
+
+/* Cloud Instances: varying sizes, speeds, and starting positions */
+.cloud-1 { 
+  width: 120px; height: 40px; top: 10%; 
+  transform: scale(1.2); opacity: 0.8; 
+  animation-duration: 45s; 
+}
+.cloud-2 { 
+  width: 100px; height: 35px; top: 35%; 
+  transform: scale(0.8); opacity: 0.6; 
+  animation-duration: 35s; animation-delay: -15s; 
+}
+.cloud-3 { 
+  width: 140px; height: 45px; top: 65%; 
+  transform: scale(1.5); opacity: 0.4; 
+  animation-duration: 60s; animation-delay: -30s; 
+}
+
+/* --- Pure CSS Birds --- */
+.bird {
+  position: absolute;
+  /* We make a bird out of just two borders of a box */
+  border-top: 2px solid #888;
+  border-right: 2px solid #888;
+  border-radius: 2px;
+  animation: fly linear infinite, flap 0.8s ease-in-out infinite alternate;
+}
+
+/* Bird Instances: Grouped together like a flock */
+.bird-1 { width: 12px; height: 12px; top: 20%; animation-duration: 25s; }
+.bird-2 { width: 10px; height: 10px; top: 22%; animation-duration: 25s; margin-left: -25px; animation-delay: -0.2s; }
+.bird-3 { width: 9px;  height: 9px;  top: 18%; animation-duration: 25s; margin-left: -30px; animation-delay: -0.4s; }
+
+/* --- The Animations --- */
+
+/* Moves items from off the left side of the screen to off the right side */
+@keyframes drift {
+  from { left: -200px; }
+  to { left: 110vw; }
+}
+
+@keyframes fly {
+  from { left: -50px; }
+  to { left: 110vw; }
+}
+
+/* Flexes the borders to look like flapping wings */
+@keyframes flap {
+  from { transform: rotate(45deg) skew(-15deg, -15deg); }
+  to { transform: rotate(45deg) skew(15deg, 15deg); }
+}

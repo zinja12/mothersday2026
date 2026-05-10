@@ -1,0 +1,83 @@
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scenic-background">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="bird bird-1"></div>
+      <div class="bird bird-2"></div>
+      <div class="bird bird-3"></div>
+    </div>
+    <div class="card-scene">
+      <div class="card">
+        <div class="card-face card-front">
+          <h1>Happy Mother's Day</h1>
+          <p>Tap to open</p>
+        </div>
+
+        <div class="card-face card-back">
+          <h2>Dear Mom,</h2>
+          <p>Your message goes here. Maybe a nice memory or just a thank you for everything.</p>
+          <p>Love, Shaan</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      const contentArray = [
+        '<img src="mom1.jpg" alt="Mom 1">',
+        '<img src="mom2.jpg" alt="Mom 1">',
+        '<img src="mom3.jpg" alt="Mom 3">',
+        `<h2>Dear Birth Giver/Bird Mom,</h2>
+         <p>In order to keep up with your talented Bahu #1 I needed to put together something equally as impressvie. However, the only skills I really have relate to 
+            technology and thus I figured this digital card coded by hand would work just fine. I hope you enjoy your day (as we try our best to spoil you, but probably fail because you never need anything) as close to half
+            as much as we love you <3.</p>
+         <p>Love, Shaan</p>`
+      ];
+
+      let currentIndex = 0;
+      let isFlipped = false;
+    
+      const card = document.querySelector('.card');
+      const frontFace = document.querySelector('.card-front');
+      const backFace = document.querySelector('.card-back');
+
+      // 1. Define the text
+  const titleText = "Happy Mother's Day";
+  
+  // 2. Split the text into an array of letters, wrap each in a span, and stagger the animation delay
+  const animatedTitle = titleText.split('').map((char, index) => {
+    if (char === ' ') return '&nbsp;'; // Keep spaces intact
+    // Multiply the index by 0.05s to create the cascading wave offset
+    return `<span class="dance-letter" style="animation-delay: ${index * 0.05}s">${char}</span>`;
+  }).join('');
+
+  // 3. Inject it into the card
+  frontFace.innerHTML = `<h1>${animatedTitle}</h1><p>Tap to open</p>`;
+      backFace.innerHTML = contentArray[currentIndex];
+
+      card.addEventListener('click', () => {
+        //stop flipping if no more content
+        if (currentIndex >= contentArray.length) return;
+
+        //toggle flip
+        isFlipped = !isFlipped;
+
+        //don't rely on CSS :hover, fix rotation with JS
+        card.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+
+        setTimeout(() => {
+          currentIndex++;
+        
+          let nextContent = contentArray[currentIndex] || contentArray[contentArray.length - 1];
+
+          if (isFlipped) {
+            frontFace.innerHTML = nextContent;
+          } else {
+            backFace.innerHTML = nextContent;
+          }
+        }, 800); 
+      });
+    </script>
+</body>
